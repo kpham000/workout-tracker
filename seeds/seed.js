@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const db = require('./models');
+const db = require('../models/exerciseModel');
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost/workout', {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+// mongoose.connect('mongodb://localhost/workout', {
+//   useNewUrlParser: true,
+//   useFindAndModify: false,
+//   useUnifiedTopology: true,
+// });
 
 const workoutSeed = [
   {
@@ -124,14 +125,29 @@ const workoutSeed = [
     ],
   },
 ];
+// Deletes and adds seed data
+async function connect() {
+  await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout');
+  db.deleteMany({})
+    .then(() => db.insertMany(workoutSeed))
+    .then((data) => {
+      console.log(data.length + ' records inserted!');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}
+connect();
 
-db.Workout.deleteMany({})
-  .then(() => db.Workout.collection.insertMany(workoutSeed))
-  .then((data) => {
-    console.log(data.result.n + ' records inserted!');
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+// db.Workout.deleteMany({})
+//   .then(() => db.Workout.collection.insertMany(workoutSeed))
+//   .then((data) => {
+//     console.log(data.result.n + ' records inserted!');
+//     process.exit(0);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//     process.exit(1);
+//   });
