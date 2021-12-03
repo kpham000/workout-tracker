@@ -34,8 +34,8 @@ router.get("/api/workouts", (req, res) => {
 
 router.post("/api/workouts", (req, res) => {
   db.create({
-    day: new Date(new Date().setDate(new Date().getDate())),
-    exercises: [],
+    // day: new Date(new Date().setDate(new Date().getDate())),
+    // exercises: [],
   })
     .then((created) => {
       res.json(created);
@@ -64,10 +64,10 @@ router.put("/api/workouts/:id", (req, res) => {
 // adds totalDuration to each
 
 router.get("/api/workouts/range", (req, res) => {
-  const d = new Date().setDate(new Date().getDate() - 7);
+  const d = new Date().setDate(new Date().getDate());
   db.aggregate(
     [
-      { $match: { day: { $gte: d } } },
+      // { $match: { day: { $gte: d } } },
       {
         $addFields: {
           totalDuration: {
